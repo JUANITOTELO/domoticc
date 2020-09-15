@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "852333646886",
+    "firebase_url": "https://macc-domoticc.firebaseio.com",
+    "project_id": "macc-domoticc",
+    "storage_bucket": "macc-domoticc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852333646886:android:b7fb468b56eb00246202e7",
+        "android_client_info": {
+          "package_name": "com.macc.domoticc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852333646886-sdk9to5kgtrgi5bau4tui7493ab7jqoc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtPqs9dLdhsIm2dC06fClvvgEowt_Mkic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852333646886-sdk9to5kgtrgi5bau4tui7493ab7jqoc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
