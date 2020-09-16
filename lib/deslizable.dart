@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'my_flutter_app_icons.dart';
 
 class Deslizable extends StatefulWidget {
   Deslizable({this.app});
@@ -10,16 +11,22 @@ class Deslizable extends StatefulWidget {
 }
 
 class _DeslizableState extends State<Deslizable> {
-  DatabaseReference _led1Ref;
-
+  DatabaseReference _persianaRef;
   Color color1 = Colors.grey;
   Color color2 = Colors.cyan;
+  IconData persiana = MyFlutterApp.icono_persiana_a;
   bool m = false;
 
   @override
   void initState() {
     super.initState();
-    _led1Ref = FirebaseDatabase.instance.reference().child('led1');
+    _persianaRef = FirebaseDatabase.instance.reference().child('persiana');
+    FirebaseDatabase database = FirebaseDatabase(app: widget.app);
+    database.reference().child('persiana').once().then((DataSnapshot snapshot) {
+      if (snapshot.value == 1) {
+        color1 = color2;
+      }
+    });
   }
 
   @override
@@ -34,7 +41,7 @@ class _DeslizableState extends State<Deslizable> {
               elevation: 0,
               bottom: TabBar(
                 tabs: [
-                  Tab(icon: Icon(Icons.directions_car)),
+                  Tab(icon: Icon(Icons.add)),
                   Tab(icon: Icon(Icons.directions_transit)),
                   Tab(icon: Icon(Icons.directions_bike)),
                   Tab(icon: Icon(Icons.account_circle)),
@@ -48,26 +55,29 @@ class _DeslizableState extends State<Deslizable> {
                 Container(
                   child: Center(
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           FlatButton(
                             color: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
                             onPressed: () {
                               setState(() {
                                 if (m == false) {
+                                  _persianaRef.set(1);
                                   color1 = color2;
                                   m = true;
-                                  _led1Ref.set(1);
                                 } else {
                                   color1 = Colors.grey;
                                   m = false;
-                                  _led1Ref.set(0);
+                                  _persianaRef.set(0);
                                 }
                               });
                             },
                             child: Icon(
-                              Icons.directions_car,
+                              persiana,
                               color: color1,
                               size: 50,
                             ),
