@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'my_flutter_app_icons.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'createTitle.dart';
+import 'createButton.dart';
 
 class DWeb extends StatefulWidget {
   const DWeb({Key key}) : super(key: key);
@@ -9,10 +11,21 @@ class DWeb extends StatefulWidget {
 }
 
 class _DWebState extends State<DWeb> {
-  //IconData persiana = MyFlutterApp.icono_persiana_a;
+  List<IconData> bombillas = [
+    MyFlutterApp.bombilla2,
+    MyFlutterApp.bombilla2,
+    MyFlutterApp.bombilla2
+  ];
+  bool buttonPressed1 = false;
+  bool buttonPressed2 = false;
+  double bombSize = 100;
+  double bombSize2 = 100;
   bool _pauseV = true;
   Color color1 = Colors.grey;
   Color color2 = Colors.grey;
+  Color color3 = Colors.grey;
+  Color color4 = Colors.grey;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -60,9 +73,11 @@ class _DWebState extends State<DWeb> {
                 ),
                 FlatButton(
                   color: Colors.transparent,
-                  highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
                   focusColor: Colors.transparent,
+                  disabledColor: Colors.transparent,
                   onPressed: () {
                     setState(() {
                       if (color2 == Colors.grey) {
@@ -89,11 +104,6 @@ class _DWebState extends State<DWeb> {
                   ),
                 ),
                 Icon(
-                  MyFlutterApp.bombilla1,
-                  color: Colors.grey,
-                  size: 120,
-                ),
-                Icon(
                   MyFlutterApp.candado1,
                   color: Colors.grey,
                   size: 120,
@@ -102,6 +112,110 @@ class _DWebState extends State<DWeb> {
                   MyFlutterApp.candado1,
                   color: Colors.grey,
                   size: 120,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      title("Escaleras"),
+                      Flexible(
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              icon(color3, bombillas[1], bombSize),
+                              icon(color4, bombillas[2], bombSize2),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          buttonPressed1
+                              ? CustomButtonOn(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color3 == Colors.grey) {
+                                        bombSize = 140;
+                                        color3 = Colors.yellow;
+                                        bombillas[1] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize = 100;
+                                        color3 = Colors.grey;
+                                        bombillas[1] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed1 = !buttonPressed1;
+                                    });
+                                  },
+                                  color: Colors.yellow,
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                )
+                              : CustomButtonOff(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color3 == Colors.grey) {
+                                        bombSize = 140;
+                                        color3 = Colors.yellow;
+                                        bombillas[1] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize = 100;
+                                        color3 = Colors.grey;
+                                        bombillas[1] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed1 = !buttonPressed1;
+                                    });
+                                  },
+                                  color: Colors.yellow,
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                ),
+                          buttonPressed2
+                              ? CustomButtonOn(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color4 == Colors.grey) {
+                                        bombSize2 = 140;
+                                        color4 = Colors.red[700];
+                                        bombillas[2] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize2 = 100;
+                                        color4 = Colors.grey;
+                                        bombillas[2] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed2 = !buttonPressed2;
+                                    });
+                                  },
+                                  color: Colors.red[700],
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                )
+                              : CustomButtonOff(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color4 == Colors.grey) {
+                                        bombSize2 = 140;
+                                        color4 = Colors.red[700];
+                                        bombillas[2] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize2 = 100;
+                                        color4 = Colors.grey;
+                                        bombillas[2] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed2 = !buttonPressed2;
+                                    });
+                                  },
+                                  color: Colors.red[700],
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Icon(
                   MyFlutterApp.candado1,
