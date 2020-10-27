@@ -20,8 +20,10 @@ class _DeslizableState extends State<Deslizable> {
     MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2
   ];
+  bool buttonPressed = false;
   bool buttonPressed1 = false;
   bool buttonPressed2 = false;
+
   double bombSize = 100;
   double bombSize2 = 100;
   Icon persiana;
@@ -67,10 +69,10 @@ class _DeslizableState extends State<Deslizable> {
       setState(() {
         if (event.snapshot.value == 1) {
           color1 = Colors.cyan;
-          persiana = icon(color1, MyFlutterApp.icono_persiana_a, 120);
+          persiana = icon(color1, Icons.bluetooth_audio_rounded, 100);
           _estadoPersiana = true;
         } else {
-          persiana = icon(Colors.grey, MyFlutterApp.icono_persiana_a, 120);
+          persiana = icon(Colors.grey, Icons.bluetooth_audio_rounded, 100);
           _estadoPersiana = false;
         }
       });
@@ -82,6 +84,10 @@ class _DeslizableState extends State<Deslizable> {
         if (event.snapshot.value == 1) {
           color3 = Colors.yellow;
           buttonPressed1 = true;
+          bombillas[1] = MyFlutterApp.bombilla1;
+        } else {
+          buttonPressed1 = false;
+          bombillas[1] = MyFlutterApp.bombilla2;
         }
       });
     });
@@ -91,10 +97,11 @@ class _DeslizableState extends State<Deslizable> {
       setState(() {
         if (event.snapshot.value == 1) {
           color4 = Colors.red[700];
-
           buttonPressed2 = true;
+          bombillas[2] = MyFlutterApp.bombilla1;
         } else {
           buttonPressed2 = false;
+          bombillas[2] = MyFlutterApp.bombilla2;
         }
       });
     });
@@ -130,20 +137,41 @@ class _DeslizableState extends State<Deslizable> {
               child: TabBar(
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
-                    color: Colors.blue,
-                    width: 3.0,
-                  ),
-                  insets: EdgeInsets.symmetric(horizontal: 50),
+                      color: Colors.white, width: 2.0, style: BorderStyle.none),
                 ),
                 tabs: [
-                  Tab(icon: Icon(Icons.home_filled)),
-                  Tab(icon: Icon(Icons.bedtime)),
-                  Tab(icon: Icon(Icons.car_rental)),
-                  Tab(icon: Icon(Icons.kitchen_rounded)),
-                  Tab(icon: Icon(Icons.room_service)),
-                  Tab(icon: Icon(Icons.stairs)),
-                  Tab(icon: Icon(Icons.alarm)),
-                  Tab(icon: Icon(Icons.account_balance_wallet)),
+                  Tab(
+                    icon: Icon(Icons.home_filled),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.bedtime),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.car_rental),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.kitchen_rounded),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.room_service),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.stairs),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.alarm),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.account_balance_wallet),
+                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
+                  ),
                 ],
               ),
             ),
@@ -151,81 +179,180 @@ class _DeslizableState extends State<Deslizable> {
               physics: BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               children: [
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              title(
-                                  "La temperatura es ${_temperatura.toString()}°")
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Flexible(
-                            child: Center(
-                              child: FlatButton(
-                                color: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        title("La temperatura es ${_temperatura.toString()}°"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            persiana,
+                          ],
+                        ),
+                        _estadoPersiana
+                            ? CustomButtonOn(
                                 onPressed: () {
                                   setState(() {
-                                    if (_estadoPersiana == false) {
-                                      _estadoPersiana = true;
-                                      _persianaRef.set(1);
-                                    } else {
-                                      _estadoPersiana = false;
+                                    if (_estadoPersiana == true) {
+                                      color1 = Colors.cyan;
                                       _persianaRef.set(0);
+                                      _estadoPersiana = false;
+                                    } else {
+                                      color2 = Colors.grey;
+                                      _persianaRef.set(1);
+                                      _estadoPersiana = true;
                                     }
                                   });
                                 },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    persiana,
-                                    SizedBox(
-                                      width: 23,
-                                    ),
-                                  ],
-                                ),
+                                color: Colors.cyan,
+                                icon: Icons.bluetooth_audio_rounded,
+                                iconSize: 60,
+                              )
+                            : CustomButtonOff(
+                                onPressed: () {
+                                  setState(() {
+                                    if (_estadoPersiana == true) {
+                                      color1 = Colors.cyan;
+                                      _persianaRef.set(0);
+                                      _estadoPersiana = false;
+                                    } else {
+                                      color1 = Colors.grey;
+                                      _persianaRef.set(1);
+                                      _estadoPersiana = true;
+                                    }
+                                  });
+                                },
+                                color: Colors.cyan,
+                                icon: Icons.bluetooth_audio_rounded,
+                                iconSize: 30,
                               ),
-                            ),
-                          )
-                        ]),
-                  ),
+                      ]),
                 ),
-                Center(
-                  child: Container(
-                    width: 300,
-                    height: 300,
-                    child: FlatButton(
-                        color: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        shape: StadiumBorder(),
-                        padding: EdgeInsets.all(10),
-                        onPressed: () {
-                          setState(() {
-                            if (_pauseV == false) {
-                              _pauseV = true;
-                              _ventRef.set(0);
-                              ventilador = animateIcon(
-                                  Colors.grey, 'ven_on', 300, 300, _pauseV);
-                            } else {
-                              _pauseV = false;
-                              _ventRef.set(1);
-                            }
-                          });
-                        },
-                        child: ventilador),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      title("Habitación"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomAnimationIcon(
+                            name: 'ven_on',
+                            color: color2,
+                            state: _pauseV,
+                          ),
+                          icon(color4, bombillas[2], bombSize2 - 20),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          persiana,
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          !_pauseV
+                              ? CustomButtonOn(
+                                  onPressed: () {
+                                    setState(() {
+                                      color2 = Colors.grey;
+                                      _ventRef.set(0);
+                                      _pauseV = true;
+                                    });
+                                  },
+                                  color: Colors.lime,
+                                  icon: MyFlutterApp.ventilador,
+                                  iconSize: 60,
+                                )
+                              : CustomButtonOff(
+                                  onPressed: () {
+                                    setState(() {
+                                      color2 = Colors.lime;
+                                      _ventRef.set(1);
+                                      _pauseV = false;
+                                    });
+                                  },
+                                  color: Colors.lime,
+                                  icon: MyFlutterApp.ventilador,
+                                  iconSize: 60,
+                                ),
+                          buttonPressed2
+                              ? CustomButtonOn(
+                                  onPressed: () {
+                                    setState(() {
+                                      bombSize2 = 100;
+                                      color4 = Colors.grey;
+                                      bombillas[2] = MyFlutterApp.bombilla2;
+                                      _bom1Ref.set(0);
+                                      buttonPressed2 = !buttonPressed2;
+                                    });
+                                  },
+                                  color: Colors.red[700],
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                )
+                              : CustomButtonOff(
+                                  onPressed: () {
+                                    setState(() {
+                                      bombSize2 = 100;
+                                      color4 = Colors.red[700];
+                                      bombillas[2] = MyFlutterApp.bombilla1;
+                                      _bom2Ref.set(1);
+                                      buttonPressed2 = !buttonPressed2;
+                                    });
+                                  },
+                                  color: Colors.red[700],
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                ),
+                        ],
+                      ),
+                      _estadoPersiana
+                          ? CustomButtonOn(
+                              onPressed: () {
+                                setState(() {
+                                  if (_estadoPersiana == true) {
+                                    color1 = Colors.cyan;
+                                    _persianaRef.set(0);
+                                    _estadoPersiana = false;
+                                  } else {
+                                    color2 = Colors.grey;
+                                    _persianaRef.set(1);
+                                    _estadoPersiana = true;
+                                  }
+                                });
+                              },
+                              color: Colors.cyan,
+                              icon: Icons.bluetooth_audio_rounded,
+                              iconSize: 60,
+                            )
+                          : CustomButtonOff(
+                              onPressed: () {
+                                setState(() {
+                                  if (_estadoPersiana == true) {
+                                    color1 = Colors.cyan;
+                                    _persianaRef.set(0);
+                                    _estadoPersiana = false;
+                                  } else {
+                                    color1 = Colors.grey;
+                                    _persianaRef.set(1);
+                                    _estadoPersiana = true;
+                                  }
+                                });
+                              },
+                              color: Colors.cyan,
+                              icon: Icons.bluetooth_audio_rounded,
+                              iconSize: 30,
+                            ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -240,34 +367,23 @@ class _DeslizableState extends State<Deslizable> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              icon(color3, bombillas[1], bombSize),
+                              icon(color3, bombillas[1], bombSize + 20),
                             ],
                           ),
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            width: 1,
-                          ),
                           buttonPressed1
                               ? CustomButtonOn(
                                   onPressed: () {
                                     setState(() {
-                                      if (buttonPressed1 == false) {
-                                        bombSize = 140;
-                                        color3 = Colors.yellow;
-                                        bombillas[1] = MyFlutterApp.bombilla1;
-                                        _bom1Ref.set(1);
-                                      } else {
-                                        bombSize = 100;
-                                        color3 = Colors.grey;
-                                        bombillas[1] = MyFlutterApp.bombilla2;
-                                        _bom1Ref.set(0);
-                                      }
-
+                                      bombSize = 100;
+                                      color3 = Colors.grey;
+                                      bombillas[1] = MyFlutterApp.bombilla2;
+                                      _bom1Ref.set(0);
                                       buttonPressed1 = !buttonPressed1;
                                     });
                                   },
@@ -278,25 +394,17 @@ class _DeslizableState extends State<Deslizable> {
                               : CustomButtonOff(
                                   onPressed: () {
                                     setState(() {
-                                      if (buttonPressed1 == false) {
-                                        bombSize = 140;
-                                        color3 = Colors.yellow;
-                                        bombillas[1] = MyFlutterApp.bombilla1;
-                                        _bom1Ref.set(1);
-                                      } else {
-                                        bombSize = 100;
-                                        color3 = Colors.grey;
-                                        bombillas[1] = MyFlutterApp.bombilla2;
-                                        _bom1Ref.set(0);
-                                      }
-
+                                      bombSize = 100;
+                                      color3 = Colors.yellow;
+                                      bombillas[1] = MyFlutterApp.bombilla1;
+                                      _bom1Ref.set(1);
                                       buttonPressed1 = !buttonPressed1;
                                     });
                                   },
                                   color: Colors.yellow,
                                   icon: bombillas[0],
                                   iconSize: 60,
-                                )
+                                ),
                         ],
                       ),
                     ],

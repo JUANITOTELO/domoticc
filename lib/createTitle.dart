@@ -9,16 +9,15 @@ Flexible title(String title) {
           color: Colors.grey[800],
           boxShadow: [
             BoxShadow(
-              color: Colors.grey[900],
-              offset: Offset(4, 4),
+              color: Colors.grey[800],
               blurRadius: 10,
-              spreadRadius: 1,
+              spreadRadius: 2,
             ),
           ]),
       child: Text(
         title,
         style: TextStyle(
-          color: Colors.orange[400],
+          color: Colors.white,
           fontSize: 25,
         ),
       ),

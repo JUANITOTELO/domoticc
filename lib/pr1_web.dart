@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'my_flutter_app_icons.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'createTitle.dart';
 import 'createButton.dart';
 
@@ -14,17 +13,21 @@ class _DWebState extends State<DWeb> {
   List<IconData> bombillas = [
     MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2,
+    MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2
   ];
   bool buttonPressed1 = false;
   bool buttonPressed2 = false;
+  bool buttonPressed3 = false;
   double bombSize = 100;
   double bombSize2 = 100;
+  double bombSize3 = 100;
   bool _pauseV = true;
   Color color1 = Colors.grey;
   Color color2 = Colors.grey;
   Color color3 = Colors.grey;
   Color color4 = Colors.grey;
+  Color color5 = Colors.grey;
 
   @override
   Widget build(BuildContext context) {
@@ -71,36 +74,58 @@ class _DWebState extends State<DWeb> {
                   color: Colors.grey,
                   size: 120,
                 ),
-                FlatButton(
-                  color: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  disabledColor: Colors.transparent,
-                  onPressed: () {
-                    setState(() {
-                      if (color2 == Colors.grey) {
-                        _pauseV = false;
-                        color2 = Colors.lime;
-                      } else {
-                        _pauseV = true;
-                        color2 = Colors.grey;
-                      }
-                    });
-                  },
-                  child: Container(
-                    width: 300,
-                    height: 300,
-                    child: FlareActor(
-                      'animations/Ventilador.flr',
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                      isPaused: _pauseV,
-                      color: color2,
-                      animation: 'ven_on',
-                      shouldClip: false,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomAnimationIcon(
+                            name: 'ven_on',
+                            color: color2,
+                            state: _pauseV,
+                          ),
+                        ],
+                      ),
+                      _pauseV
+                          ? CustomButtonOn(
+                              onPressed: () {
+                                setState(() {
+                                  if (_pauseV == true) {
+                                    color2 = Colors.lime;
+                                    _pauseV = false;
+                                  } else {
+                                    color2 = Colors.grey;
+                                    _pauseV = true;
+                                  }
+                                });
+                              },
+                              color: Colors.lime,
+                              icon: MyFlutterApp.ventilador,
+                              iconSize: 60,
+                            )
+                          : CustomButtonOff(
+                              onPressed: () {
+                                setState(() {
+                                  if (_pauseV == true) {
+                                    color2 = Colors.lime;
+                                    _pauseV = false;
+                                  } else {
+                                    color2 = Colors.grey;
+                                    _pauseV = true;
+                                  }
+                                });
+                              },
+                              color: Colors.lime,
+                              icon: MyFlutterApp.ventilador,
+                              iconSize: 60,
+                            ),
+                    ],
                   ),
                 ),
                 Icon(
@@ -116,30 +141,31 @@ class _DWebState extends State<DWeb> {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       title("Escaleras"),
-                      Flexible(
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              icon(color3, bombillas[1], bombSize),
-                              icon(color4, bombillas[2], bombSize2),
-                            ],
-                          ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            icon(color3, bombillas[1], bombSize),
+                            icon(color5, bombillas[3], bombSize3),
+                            icon(color4, bombillas[2], bombSize2),
+                          ],
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buttonPressed1
                               ? CustomButtonOn(
                                   onPressed: () {
                                     setState(() {
                                       if (color3 == Colors.grey) {
-                                        bombSize = 140;
+                                        bombSize = 100;
                                         color3 = Colors.yellow;
                                         bombillas[1] = MyFlutterApp.bombilla1;
                                       } else {
@@ -158,7 +184,7 @@ class _DWebState extends State<DWeb> {
                                   onPressed: () {
                                     setState(() {
                                       if (color3 == Colors.grey) {
-                                        bombSize = 140;
+                                        bombSize = 100;
                                         color3 = Colors.yellow;
                                         bombillas[1] = MyFlutterApp.bombilla1;
                                       } else {
@@ -173,12 +199,54 @@ class _DWebState extends State<DWeb> {
                                   icon: bombillas[0],
                                   iconSize: 60,
                                 ),
+                          SizedBox(
+                            width: 100,
+                          ),
+                          buttonPressed3
+                              ? CustomButtonOn(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color5 == Colors.grey) {
+                                        bombSize3 = 100;
+                                        color5 = Colors.pink;
+                                        bombillas[3] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize3 = 100;
+                                        color5 = Colors.grey;
+                                        bombillas[3] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed3 = !buttonPressed3;
+                                    });
+                                  },
+                                  color: Colors.pink,
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                )
+                              : CustomButtonOff(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (color5 == Colors.grey) {
+                                        bombSize3 = 140;
+                                        color5 = Colors.pink;
+                                        bombillas[3] = MyFlutterApp.bombilla1;
+                                      } else {
+                                        bombSize3 = 100;
+                                        color3 = Colors.grey;
+                                        bombillas[3] = MyFlutterApp.bombilla2;
+                                      }
+                                      buttonPressed3 = !buttonPressed3;
+                                    });
+                                  },
+                                  color: Colors.pink,
+                                  icon: bombillas[0],
+                                  iconSize: 60,
+                                ),
                           buttonPressed2
                               ? CustomButtonOn(
                                   onPressed: () {
                                     setState(() {
                                       if (color4 == Colors.grey) {
-                                        bombSize2 = 140;
+                                        bombSize2 = 100;
                                         color4 = Colors.red[700];
                                         bombillas[2] = MyFlutterApp.bombilla1;
                                       } else {
@@ -197,7 +265,7 @@ class _DWebState extends State<DWeb> {
                                   onPressed: () {
                                     setState(() {
                                       if (color4 == Colors.grey) {
-                                        bombSize2 = 140;
+                                        bombSize2 = 100;
                                         color4 = Colors.red[700];
                                         bombillas[2] = MyFlutterApp.bombilla1;
                                       } else {

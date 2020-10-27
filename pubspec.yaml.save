@@ -1,4 +1,4 @@
-name: domoticc
+	name: domoticc
 description: Proyecto Domoticc MACC Cornerstone.
 
 # The following line prevents the package from being accidentally published to
@@ -23,11 +23,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flare_flutter: ^2.0.6
-  firebase_core: ^0.5.0+1
-  cupertino_icons: ^1.0.0
-  firebase_database: ^4.1.1
-  shared_preferences: ^0.5.12+2
+  flare_flutter: 
+  firebase_core: 
+  cupertino_icons: 
+  firebase_database: 
+  shared_preferences: 
 dev_dependencies:
   flutter_test:
     sdk: flutter
