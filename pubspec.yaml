@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flare_flutter: ^2.0.6
+  flare_splash_screen: ^3.0.1
   firebase_core: ^0.5.0+1
   cupertino_icons: ^1.0.0
   firebase_database: ^4.1.1

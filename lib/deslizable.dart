@@ -1,6 +1,7 @@
 import 'references.dart';
 import 'createTitle.dart';
 import 'createButton.dart';
+import 'createCTab.dart';
 import 'my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,47 +16,70 @@ class Deslizable extends StatefulWidget {
 }
 
 class _DeslizableState extends State<Deslizable> {
+  //Lista con los iconos de las bombillas
   List<IconData> bombillas = [
+    MyFlutterApp.bombilla2,
+    MyFlutterApp.bombilla2,
+    MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2,
     MyFlutterApp.bombilla2
   ];
-  bool buttonPressed = false;
-  bool buttonPressed1 = false;
-  bool buttonPressed2 = false;
 
-  double bombSize = 100;
-  double bombSize2 = 100;
-  Icon persiana;
-  Container ventilador;
-  bool _pauseV = true;
-  dynamic _temperatura;
   bool _estadoPersiana;
+  bool _pauseV = true;
+  bool _estadoPuGaraje;
+  bool _estadoDispensador;
+  bool _estadoPuSala;
+  bool _estadoAlarma;
 
-  String passWord =
-      "queriwW201*/+-'¿/()('645'046e69abbbc435647ed070fb26b7e6256c6da35a9c95bd37b49020587a0aba21a";
-  DatabaseReference _persianaRef;
-  DatabaseReference _ventRef;
-  DatabaseReference _temRef;
-  DatabaseReference _bom1Ref;
-  DatabaseReference _bom2Ref;
-  DatabaseReference _auth;
+  IconData puertaG = MyFlutterApp.garage_down;
+  IconData puertaG2 = MyFlutterApp.garage_down;
+  IconData puertaS = MyFlutterApp.candado2;
+  IconData seguridad = MyFlutterApp.candado2;
+  Container ventilador;
+  dynamic _temperatura;
+  //Lista con los estados de los botones de las bombillas
+  List<bool> buttonPressedL = [false, false, false, false, false];
+
+  //Lista con los colores de las bombillas
+  List<Color> colors = [
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey
+  ];
+
+  //Colores de todos los botones
+  Color colorD = Colors.grey;
   Color color1 = Colors.grey;
   Color color2 = Colors.grey;
   Color color3 = Colors.grey;
-  Color color4 = Colors.grey;
+  Color colorPS = Colors.grey;
+  Color colorPG = Colors.grey;
   bool m = false;
+
+  //Referencias de la base de datos
+  DatabaseReference _persianaRef = createReference('persiana');
+  DatabaseReference _ventRef = createReference("ventilador1");
+  DatabaseReference _temRef = createReference('Temperatura');
+  DatabaseReference _alarRef = createReference('alarma');
+  DatabaseReference _garajePuRef = createReference('p_garaje');
+  DatabaseReference _salaPuRef = createReference('p_sala');
+  DatabaseReference _dispRef = createReference('comida_m');
+  //Lista con las referencias de los bombillos de la base de datos
+  List<DatabaseReference> _bomRef = [
+    createReference("bombilla1"),
+    createReference("bombilla2"),
+    createReference("bombilla3"),
+    createReference("bombilla4"),
+    createReference("bombilla5")
+  ];
+
   @override
   void initState() {
     super.initState();
-    _auth = createReference('Autenticacion');
-    _auth.set(passWord);
-
-    _ventRef = createReference("ventilador1");
-    _persianaRef = createReference('persiana');
-    _temRef = createReference('Temperatura');
-    _bom1Ref = createReference('bombilla1');
-    _bom2Ref = createReference('bombilla2');
     //Leer temperatura actual
     _temRef.keepSynced(true);
     _temRef.onValue.listen((Event event) {
@@ -63,59 +87,176 @@ class _DeslizableState extends State<Deslizable> {
         _temperatura = event.snapshot.value;
       });
     });
+
+    //Leer y escribir el estado de la alarma
+    _alarRef.keepSynced(true);
+    _alarRef.onValue.listen((Event event) {
+      setState(() {
+        if (event.snapshot.value == 1) {
+          _estadoAlarma = true;
+          seguridad = MyFlutterApp.candado1;
+        } else {
+          _estadoAlarma = false;
+          seguridad = MyFlutterApp.candado2;
+        }
+      });
+    });
+
+    //Leer y escribir el estado de la puerta del garaje
+    _garajePuRef.keepSynced(true);
+    _garajePuRef.onValue.listen((Event event) {
+      setState(
+        () {
+          if (event.snapshot.value == 1) {
+            _estadoPuGaraje = true;
+            colorPG = Colors.pink;
+            puertaG = MyFlutterApp.garage_up;
+            puertaG2 = MyFlutterApp.garage_down;
+          } else {
+            _estadoPuGaraje = false;
+            colorPG = Colors.grey;
+            puertaG = MyFlutterApp.garage_down;
+            puertaG2 = MyFlutterApp.garage_up;
+          }
+        },
+      );
+    });
+
+    //Leer y escribir el estado de la puerta de la sala
+    _salaPuRef.keepSynced(true);
+    _salaPuRef.onValue.listen((Event event) {
+      setState(
+        () {
+          if (event.snapshot.value == 1) {
+            _estadoPuSala = true;
+            colorPS = Colors.deepOrange;
+            puertaS = MyFlutterApp.candado2;
+          } else {
+            _estadoPuSala = false;
+            colorPS = Colors.grey;
+            puertaS = MyFlutterApp.candado1;
+          }
+        },
+      );
+    });
+
+    //Leer y escribir el estado del dispensador para la mascota
+    _dispRef.keepSynced(true);
+    _dispRef.onValue.listen((Event event) {
+      setState(
+        () {
+          if (event.snapshot.value == 1) {
+            _estadoDispensador = true;
+            colorD = Colors.red[700];
+          } else {
+            _estadoDispensador = false;
+            colorD = Colors.grey;
+          }
+        },
+      );
+    });
+
     //Leer y escibir el estado de las persianas
     _persianaRef.keepSynced(true);
     _persianaRef.onValue.listen((Event event) {
       setState(() {
         if (event.snapshot.value == 1) {
           color1 = Colors.cyan;
-          persiana = icon(color1, Icons.bluetooth_audio_rounded, 100);
           _estadoPersiana = true;
         } else {
-          persiana = icon(Colors.grey, Icons.bluetooth_audio_rounded, 100);
           _estadoPersiana = false;
+          color1 = Colors.grey;
         }
       });
     });
     //Leer y escibir el estado de las bombillas
-    _bom1Ref.keepSynced(true);
-    _bom1Ref.onValue.listen((Event event) {
+    //        LED Escaleras
+    _bomRef[0].keepSynced(true);
+    _bomRef[0].onValue.listen((Event event) {
       setState(() {
         if (event.snapshot.value == 1) {
-          color3 = Colors.yellow;
-          buttonPressed1 = true;
+          colors[1] = Colors.yellow;
+          buttonPressedL[1] = true;
           bombillas[1] = MyFlutterApp.bombilla1;
         } else {
-          buttonPressed1 = false;
+          buttonPressedL[1] = false;
           bombillas[1] = MyFlutterApp.bombilla2;
         }
       });
     });
 
-    _bom2Ref.keepSynced(true);
-    _bom2Ref.onValue.listen((Event event) {
+    //LED Habitación
+    _bomRef[1].keepSynced(true);
+    _bomRef[1].onValue.listen((Event event) {
       setState(() {
         if (event.snapshot.value == 1) {
-          color4 = Colors.red[700];
-          buttonPressed2 = true;
+          colors[0] = Colors.red[700];
+          buttonPressedL[0] = true;
           bombillas[2] = MyFlutterApp.bombilla1;
         } else {
-          buttonPressed2 = false;
+          buttonPressedL[0] = false;
           bombillas[2] = MyFlutterApp.bombilla2;
         }
       });
     });
-    //Leer y escibir el estado de los ventiladores
+
+    //LED Cocina
+    _bomRef[2].keepSynced(true);
+    _bomRef[2].onValue.listen((Event event) {
+      setState(() {
+        if (event.snapshot.value == 1) {
+          colors[2] = Colors.blue[700];
+          buttonPressedL[2] = true;
+          bombillas[3] = MyFlutterApp.bombilla1;
+        } else {
+          buttonPressedL[2] = false;
+          bombillas[3] = MyFlutterApp.bombilla2;
+        }
+      });
+    });
+
+    //LED garaje
+    _bomRef[3].keepSynced(true);
+    _bomRef[3].onValue.listen((Event event) {
+      setState(() {
+        if (event.snapshot.value == 1) {
+          colors[3] = Colors.deepOrange[500];
+          buttonPressedL[3] = true;
+          bombillas[4] = MyFlutterApp.bombilla1;
+        } else {
+          buttonPressedL[3] = false;
+          bombillas[4] = MyFlutterApp.bombilla2;
+        }
+      });
+    });
+
+    //LED sala
+    _bomRef[4].keepSynced(true);
+    _bomRef[4].onValue.listen((Event event) {
+      setState(() {
+        if (event.snapshot.value == 1) {
+          colors[4] = Colors.deepPurple[500];
+          buttonPressedL[4] = true;
+          bombillas[5] = MyFlutterApp.bombilla1;
+        } else {
+          buttonPressedL[4] = false;
+          bombillas[5] = MyFlutterApp.bombilla2;
+        }
+      });
+    });
+
+    //Leer y escibir el estado del ventilador
     _ventRef.keepSynced(true);
     _ventRef.onValue.listen((Event event) {
       setState(() {
         if (event.snapshot.value == 1) {
           color2 = Colors.lime;
           _pauseV = false;
-          ventilador = animateIcon(color2, 'ven_on', 300, 300, _pauseV);
+          ventilador = animateIcon(color2, 'ven_on', 400, 400, _pauseV);
         } else {
+          color2 = Colors.grey;
           _pauseV = true;
-          ventilador = animateIcon(Colors.grey, 'ven_on', 300, 300, _pauseV);
+          ventilador = animateIcon(Colors.grey, 'ven_on', 400, 400, _pauseV);
         }
       });
     });
@@ -127,7 +268,7 @@ class _DeslizableState extends State<Deslizable> {
     return MaterialApp(
       darkTheme: ThemeData.dark(),
       home: DefaultTabController(
-        length: 8,
+        length: 7,
         child: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.grey[900],
@@ -135,41 +276,44 @@ class _DeslizableState extends State<Deslizable> {
               color: Colors.transparent,
               elevation: 0,
               child: TabBar(
+                unselectedLabelColor: Colors.white,
+                labelColor: Colors.grey,
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
                       color: Colors.white, width: 2.0, style: BorderStyle.none),
                 ),
                 tabs: [
                   Tab(
-                    icon: Icon(Icons.home_filled),
+                    icon: Icon(
+                      MyFlutterApp.bed,
+                    ),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.bedtime),
+                    icon: Icon(MyFlutterApp.garaje_privado),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.car_rental),
+                    icon: Icon(MyFlutterApp.chef_toque_and_mustache),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.kitchen_rounded),
+                    icon: Icon(MyFlutterApp.sala),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.room_service),
+                    icon: Icon(MyFlutterApp.stairs_with_handrail),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.stairs),
+                    icon: Icon(
+                      seguridad,
+                      color: _estadoAlarma ? color3 : Colors.white,
+                    ),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(Icons.alarm),
-                    iconMargin: EdgeInsets.symmetric(horizontal: 15),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.account_balance_wallet),
+                    icon: Icon(MyFlutterApp.bath),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                 ],
@@ -179,262 +323,356 @@ class _DeslizableState extends State<Deslizable> {
               physics: BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
+                customTab(
+                  [
+                    title("Habitación\n${_temperatura.toString()}°"),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 48.0, left: 48.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          icon(colors[0], bombillas[2], 80),
+                          icon(color1, MyFlutterApp.smart_curtain, 100),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0, left: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            onPressed: () {
+                              setState(() {
+                                if (buttonPressedL[0]) {
+                                  colors[0] = Colors.grey;
+                                  bombillas[2] = MyFlutterApp.bombilla2;
+                                  _bomRef[1].set(0);
+                                } else {
+                                  colors[0] = Colors.red[700];
+                                  bombillas[2] = MyFlutterApp.bombilla1;
+                                  _bomRef[1].set(1);
+                                }
+                                buttonPressedL[0] = !buttonPressedL[0];
+                              });
+                            },
+                            color: Colors.red[700],
+                            icon: bombillas[0],
+                            iconSize: 60,
+                            state: buttonPressedL[0],
+                          ),
+                          CustomButton(
+                            icon: MyFlutterApp.smart_curtain,
+                            iconSize: 60,
+                            color: Colors.cyan,
+                            state: _estadoPersiana,
+                            onPressed: () {
+                              setState(() {
+                                if (_estadoPersiana == true) {
+                                  color1 = Colors.grey;
+                                  _persianaRef.set(0);
+                                  _estadoPersiana = false;
+                                } else {
+                                  color1 = Colors.cyan;
+                                  _persianaRef.set(1);
+                                  _estadoPersiana = true;
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                customTab([
+                  title("Garaje"),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        title("La temperatura es ${_temperatura.toString()}°"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        icon(colors[3], bombillas[4], 100),
+                        icon(colorPG, puertaG, 100)
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomButton(
+                        onPressed: () {
+                          setState(() {
+                            if (buttonPressedL[3]) {
+                              colors[3] = Colors.grey;
+                              bombillas[4] = MyFlutterApp.bombilla2;
+                              _bomRef[3].set(0);
+                            } else {
+                              colors[3] = Colors.deepOrange[500];
+                              bombillas[4] = MyFlutterApp.bombilla1;
+                              _bomRef[3].set(1);
+                            }
+                            buttonPressedL[3] = !buttonPressedL[3];
+                          });
+                        },
+                        color: Colors.deepOrange[500],
+                        icon: bombillas[0],
+                        iconSize: 60,
+                        state: buttonPressedL[3],
+                      ),
+                      CustomButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_estadoPuGaraje) {
+                              colorPG = Colors.grey;
+                              puertaG = MyFlutterApp.garage_down;
+                              puertaG2 = MyFlutterApp.garage_up;
+                              _garajePuRef.set(0);
+                            } else {
+                              colorPG = Colors.pink;
+                              puertaG = MyFlutterApp.garage_up;
+                              puertaG2 = MyFlutterApp.garage_down;
+                              _garajePuRef.set(1);
+                            }
+                            _estadoPuGaraje = !_estadoPuGaraje;
+                          });
+                        },
+                        color: Colors.pink,
+                        icon: puertaG2,
+                        iconSize: 60,
+                        state: _estadoPuGaraje,
+                      )
+                    ],
+                  )
+                ]),
+                customTab(
+                  [
+                    title("Cocina"),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 40.0, left: 40.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          icon(colors[2], bombillas[3], 100),
+                          icon(colorD,
+                              MyFlutterApp.cuenco_de_comida_para_perros, 100)
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (buttonPressedL[2]) {
+                                colors[2] = Colors.grey;
+                                bombillas[3] = MyFlutterApp.bombilla2;
+                                _bomRef[2].set(0);
+                              } else {
+                                colors[2] = Colors.blue[700];
+                                bombillas[3] = MyFlutterApp.bombilla1;
+                                _bomRef[2].set(1);
+                              }
+                              buttonPressedL[2] = !buttonPressedL[2];
+                            });
+                          },
+                          color: Colors.blue[700],
+                          icon: bombillas[0],
+                          iconSize: 60,
+                          state: buttonPressedL[2],
+                        ),
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (_estadoDispensador) {
+                                _dispRef.set(0);
+                                colorD = Colors.grey;
+                              } else {
+                                _dispRef.set(1);
+                                colorD = Colors.red[700];
+                              }
+                              _estadoDispensador = !_estadoDispensador;
+                            });
+                          },
+                          color: Colors.red[700],
+                          icon: MyFlutterApp.cuenco_de_comida_para_perros,
+                          iconSize: 60,
+                          state: _estadoDispensador,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                customTab(
+                  [
+                    title("Sala"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        icon(colors[4], bombillas[5], 100),
+                        CustomAnimationIcon(
+                          name: 'ven_on',
+                          color: color2,
+                          state: _pauseV,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [icon(colorPS, puertaS, 100)],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (buttonPressedL[4]) {
+                                colors[4] = Colors.grey;
+                                bombillas[5] = MyFlutterApp.bombilla2;
+                                _bomRef[4].set(0);
+                              } else {
+                                colors[4] = Colors.deepPurple[500];
+                                bombillas[5] = MyFlutterApp.bombilla1;
+                                _bomRef[4].set(1);
+                              }
+                              buttonPressedL[4] = !buttonPressedL[4];
+                            });
+                          },
+                          color: Colors.deepPurple[500],
+                          icon: bombillas[5],
+                          iconSize: 60,
+                          state: buttonPressedL[4],
+                        ),
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (!_pauseV) {
+                                color2 = Colors.grey;
+                                _ventRef.set(0);
+                                _pauseV = true;
+                              } else {
+                                color2 = Colors.lime;
+                                _ventRef.set(1);
+                                _pauseV = false;
+                              }
+                            });
+                          },
+                          color: Colors.lime,
+                          icon: MyFlutterApp.ventilador,
+                          iconSize: 60,
+                          state: !_pauseV,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (_estadoPuSala) {
+                                colorPS = Colors.grey;
+                                puertaS = MyFlutterApp.candado2;
+                                _salaPuRef.set(0);
+                              } else {
+                                colorPS = Colors.deepOrange;
+                                puertaS = MyFlutterApp.candado1;
+                                _salaPuRef.set(1);
+                              }
+                              _estadoPuSala = !_estadoPuSala;
+                            });
+                          },
+                          color: Colors.deepOrange,
+                          icon: MyFlutterApp.candado1,
+                          iconSize: 60,
+                          state: _estadoPuSala,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                customTab(
+                  [
+                    title("Escaleras"),
+                    Flexible(
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            persiana,
+                            icon(colors[1], bombillas[1], 120),
                           ],
                         ),
-                        _estadoPersiana
-                            ? CustomButtonOn(
-                                onPressed: () {
-                                  setState(() {
-                                    if (_estadoPersiana == true) {
-                                      color1 = Colors.cyan;
-                                      _persianaRef.set(0);
-                                      _estadoPersiana = false;
-                                    } else {
-                                      color2 = Colors.grey;
-                                      _persianaRef.set(1);
-                                      _estadoPersiana = true;
-                                    }
-                                  });
-                                },
-                                color: Colors.cyan,
-                                icon: Icons.bluetooth_audio_rounded,
-                                iconSize: 60,
-                              )
-                            : CustomButtonOff(
-                                onPressed: () {
-                                  setState(() {
-                                    if (_estadoPersiana == true) {
-                                      color1 = Colors.cyan;
-                                      _persianaRef.set(0);
-                                      _estadoPersiana = false;
-                                    } else {
-                                      color1 = Colors.grey;
-                                      _persianaRef.set(1);
-                                      _estadoPersiana = true;
-                                    }
-                                  });
-                                },
-                                color: Colors.cyan,
-                                icon: Icons.bluetooth_audio_rounded,
-                                iconSize: 30,
-                              ),
-                      ]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      title("Habitación"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CustomAnimationIcon(
-                            name: 'ven_on',
-                            color: color2,
-                            state: _pauseV,
-                          ),
-                          icon(color4, bombillas[2], bombSize2 - 20),
-                        ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          persiana,
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          !_pauseV
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      color2 = Colors.grey;
-                                      _ventRef.set(0);
-                                      _pauseV = true;
-                                    });
-                                  },
-                                  color: Colors.lime,
-                                  icon: MyFlutterApp.ventilador,
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      color2 = Colors.lime;
-                                      _ventRef.set(1);
-                                      _pauseV = false;
-                                    });
-                                  },
-                                  color: Colors.lime,
-                                  icon: MyFlutterApp.ventilador,
-                                  iconSize: 60,
-                                ),
-                          buttonPressed2
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      bombSize2 = 100;
-                                      color4 = Colors.grey;
-                                      bombillas[2] = MyFlutterApp.bombilla2;
-                                      _bom1Ref.set(0);
-                                      buttonPressed2 = !buttonPressed2;
-                                    });
-                                  },
-                                  color: Colors.red[700],
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      bombSize2 = 100;
-                                      color4 = Colors.red[700];
-                                      bombillas[2] = MyFlutterApp.bombilla1;
-                                      _bom2Ref.set(1);
-                                      buttonPressed2 = !buttonPressed2;
-                                    });
-                                  },
-                                  color: Colors.red[700],
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                ),
-                        ],
-                      ),
-                      _estadoPersiana
-                          ? CustomButtonOn(
-                              onPressed: () {
-                                setState(() {
-                                  if (_estadoPersiana == true) {
-                                    color1 = Colors.cyan;
-                                    _persianaRef.set(0);
-                                    _estadoPersiana = false;
-                                  } else {
-                                    color2 = Colors.grey;
-                                    _persianaRef.set(1);
-                                    _estadoPersiana = true;
-                                  }
-                                });
-                              },
-                              color: Colors.cyan,
-                              icon: Icons.bluetooth_audio_rounded,
-                              iconSize: 60,
-                            )
-                          : CustomButtonOff(
-                              onPressed: () {
-                                setState(() {
-                                  if (_estadoPersiana == true) {
-                                    color1 = Colors.cyan;
-                                    _persianaRef.set(0);
-                                    _estadoPersiana = false;
-                                  } else {
-                                    color1 = Colors.grey;
-                                    _persianaRef.set(1);
-                                    _estadoPersiana = true;
-                                  }
-                                });
-                              },
-                              color: Colors.cyan,
-                              icon: Icons.bluetooth_audio_rounded,
-                              iconSize: 30,
-                            ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      title("Escaleras"),
-                      Flexible(
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              icon(color3, bombillas[1], bombSize + 20),
-                            ],
-                          ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (buttonPressedL[1]) {
+                                colors[1] = Colors.grey;
+                                bombillas[1] = MyFlutterApp.bombilla2;
+                                _bomRef[0].set(0);
+                              } else {
+                                colors[1] = Colors.yellow;
+                                bombillas[1] = MyFlutterApp.bombilla1;
+                                _bomRef[0].set(1);
+                              }
+                              buttonPressedL[1] = !buttonPressedL[1];
+                            });
+                          },
+                          color: Colors.yellow,
+                          icon: bombillas[0],
+                          iconSize: 60,
+                          state: buttonPressedL[1],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          buttonPressed1
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      bombSize = 100;
-                                      color3 = Colors.grey;
-                                      bombillas[1] = MyFlutterApp.bombilla2;
-                                      _bom1Ref.set(0);
-                                      buttonPressed1 = !buttonPressed1;
-                                    });
-                                  },
-                                  color: Colors.yellow,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      bombSize = 100;
-                                      color3 = Colors.yellow;
-                                      bombillas[1] = MyFlutterApp.bombilla1;
-                                      _bom1Ref.set(1);
-                                      buttonPressed1 = !buttonPressed1;
-                                    });
-                                  },
-                                  color: Colors.yellow,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
+                  ],
+                ),
+                customTab(
+                  [
+                    title("Seguridad"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [icon(color3, MyFlutterApp.siren, 120)],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            setState(() {
+                              if (_estadoAlarma) {
+                                color3 = Colors.grey;
+                                _alarRef.set(0);
+                              } else {
+                                color3 = Colors.red[900];
+                                _alarRef.set(1);
+                              }
+                              _estadoAlarma = !_estadoAlarma;
+                            });
+                          },
+                          color: Colors.red[900],
+                          icon: MyFlutterApp.siren,
+                          iconSize: 60,
+                          state: _estadoAlarma,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                customTab([
+                  title("Iconos"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [],
                   ),
-                ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                )
+                ]),
               ],
             ),
           ),

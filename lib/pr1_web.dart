@@ -49,14 +49,14 @@ class _DWebState extends State<DWeb> {
                   insets: EdgeInsets.symmetric(horizontal: 50),
                 ),
                 tabs: [
+                  Tab(icon: Icon(MyFlutterApp.bed)),
+                  Tab(icon: Icon(MyFlutterApp.garaje_privado)),
+                  Tab(icon: Icon(MyFlutterApp.chef_toque_and_mustache)),
+                  Tab(icon: Icon(MyFlutterApp.sala)),
+                  Tab(icon: Icon(MyFlutterApp.stairs_with_handrail)),
+                  Tab(icon: Icon(MyFlutterApp.bath)),
+                  Tab(icon: Icon(MyFlutterApp.candado1)),
                   Tab(icon: Icon(Icons.home_filled)),
-                  Tab(icon: Icon(Icons.bedtime)),
-                  Tab(icon: Icon(Icons.car_rental)),
-                  Tab(icon: Icon(Icons.kitchen_rounded)),
-                  Tab(icon: Icon(Icons.room_service)),
-                  Tab(icon: Icon(Icons.stairs)),
-                  Tab(icon: Icon(Icons.alarm)),
-                  Tab(icon: Icon(Icons.account_balance_wallet)),
                 ],
               ),
             ),
@@ -70,14 +70,14 @@ class _DWebState extends State<DWeb> {
                   size: 120,
                 ),
                 Icon(
-                  MyFlutterApp.icono_persiana_a,
+                  MyFlutterApp.cuenco_de_comida_para_perros,
                   color: Colors.grey,
                   size: 120,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
@@ -150,7 +150,6 @@ class _DWebState extends State<DWeb> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             icon(color3, bombillas[1], bombSize),
-                            icon(color5, bombillas[3], bombSize3),
                             icon(color4, bombillas[2], bombSize2),
                           ],
                         ),
@@ -160,126 +159,41 @@ class _DWebState extends State<DWeb> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          buttonPressed1
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color3 == Colors.grey) {
-                                        bombSize = 100;
-                                        color3 = Colors.yellow;
-                                        bombillas[1] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize = 100;
-                                        color3 = Colors.grey;
-                                        bombillas[1] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed1 = !buttonPressed1;
-                                    });
-                                  },
-                                  color: Colors.yellow,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color3 == Colors.grey) {
-                                        bombSize = 100;
-                                        color3 = Colors.yellow;
-                                        bombillas[1] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize = 100;
-                                        color3 = Colors.grey;
-                                        bombillas[1] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed1 = !buttonPressed1;
-                                    });
-                                  },
-                                  color: Colors.yellow,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                ),
-                          SizedBox(
-                            width: 100,
+                          CustomButton(
+                            icon: MyFlutterApp.bombilla2,
+                            state: buttonPressed1,
+                            color: Colors.yellow,
+                            onPressed: () {
+                              setState(() {
+                                if (buttonPressed1) {
+                                  color3 = Colors.grey;
+                                  bombillas[1] = MyFlutterApp.bombilla2;
+                                } else {
+                                  color3 = Colors.yellow;
+                                  bombillas[1] = MyFlutterApp.bombilla1;
+                                }
+                                buttonPressed1 = !buttonPressed1;
+                              });
+                            },
                           ),
-                          buttonPressed3
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color5 == Colors.grey) {
-                                        bombSize3 = 100;
-                                        color5 = Colors.pink;
-                                        bombillas[3] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize3 = 100;
-                                        color5 = Colors.grey;
-                                        bombillas[3] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed3 = !buttonPressed3;
-                                    });
-                                  },
-                                  color: Colors.pink,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color5 == Colors.grey) {
-                                        bombSize3 = 140;
-                                        color5 = Colors.pink;
-                                        bombillas[3] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize3 = 100;
-                                        color3 = Colors.grey;
-                                        bombillas[3] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed3 = !buttonPressed3;
-                                    });
-                                  },
-                                  color: Colors.pink,
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                ),
-                          buttonPressed2
-                              ? CustomButtonOn(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color4 == Colors.grey) {
-                                        bombSize2 = 100;
-                                        color4 = Colors.red[700];
-                                        bombillas[2] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize2 = 100;
-                                        color4 = Colors.grey;
-                                        bombillas[2] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed2 = !buttonPressed2;
-                                    });
-                                  },
-                                  color: Colors.red[700],
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                )
-                              : CustomButtonOff(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (color4 == Colors.grey) {
-                                        bombSize2 = 100;
-                                        color4 = Colors.red[700];
-                                        bombillas[2] = MyFlutterApp.bombilla1;
-                                      } else {
-                                        bombSize2 = 100;
-                                        color4 = Colors.grey;
-                                        bombillas[2] = MyFlutterApp.bombilla2;
-                                      }
-                                      buttonPressed2 = !buttonPressed2;
-                                    });
-                                  },
-                                  color: Colors.red[700],
-                                  icon: bombillas[0],
-                                  iconSize: 60,
-                                ),
+                          CustomButton(
+                            icon: MyFlutterApp.bombilla2,
+                            state: buttonPressed2,
+                            color: Colors.cyan,
+                            onPressed: () {
+                              setState(() {
+                                if (buttonPressed2) {
+                                  color4 = Colors.grey;
+                                  buttonPressed2 = false;
+                                  bombillas[2] = MyFlutterApp.bombilla2;
+                                } else {
+                                  color4 = Colors.cyan;
+                                  buttonPressed2 = true;
+                                  bombillas[2] = MyFlutterApp.bombilla1;
+                                }
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ],

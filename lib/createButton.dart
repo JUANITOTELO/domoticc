@@ -223,3 +223,34 @@ class CustomButtonOn extends StatelessWidget {
     );
   }
 }
+
+class CustomButton extends StatefulWidget {
+  CustomButton(
+      {this.state, this.onPressed, this.color, this.icon, this.iconSize});
+  final GestureTapCallback onPressed;
+  final IconData icon;
+  final bool state;
+  final Color color;
+  final double iconSize;
+  @override
+  State<StatefulWidget> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.state
+        ? CustomButtonOn(
+            icon: widget.icon,
+            onPressed: widget.onPressed,
+            color: widget.color,
+            iconSize: widget.iconSize,
+          )
+        : CustomButtonOff(
+            icon: widget.icon,
+            onPressed: widget.onPressed,
+            color: widget.color,
+            iconSize: widget.iconSize,
+          );
+  }
+}

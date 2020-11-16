@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Flexible title(String title) {
+Flexible title(String title, [double fsize = 25, Color color = Colors.white]) {
   return Flexible(
     child: Container(
       padding: EdgeInsets.all(20),
@@ -17,9 +17,10 @@ Flexible title(String title) {
       child: Text(
         title,
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 25,
+          color: color,
+          fontSize: fsize,
         ),
+        textAlign: TextAlign.center,
       ),
     ),
   );

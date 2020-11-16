@@ -9,20 +9,27 @@ Future<void> main() async {
   if (kIsWeb) {
     runApp(DWeb());
   } else {
-    final FirebaseApp app = await Firebase.initializeApp(
-      name: "domoticc",
-      options: FirebaseOptions(
-          apiKey: "AIzaSyAPOFoXfKnGl-Y-utGSRF4XeeFcMZkSfE8",
-          authDomain: "macc-domoticc.firebaseapp.com",
-          databaseURL: "https://macc-domoticc.firebaseio.com",
-          projectId: "macc-domoticc",
-          storageBucket: "macc-domoticc.appspot.com",
-          messagingSenderId: "852333646886",
-          appId: "1:852333646886:android:b7fb468b56eb00246202e7",
-          measurementId: "G-SD848QB5QP"),
-    );
-    runApp(Deslizable(
-      app: app,
-    ));
+    if (Firebase.apps.isEmpty) {
+      final FirebaseApp app = await Firebase.initializeApp(
+        name: "domoticc",
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyAPOFoXfKnGl-Y-utGSRF4XeeFcMZkSfE8",
+            authDomain: "macc-domoticc.firebaseapp.com",
+            databaseURL: "https://macc-domoticc.firebaseio.com",
+            projectId: "macc-domoticc",
+            storageBucket: "macc-domoticc.appspot.com",
+            messagingSenderId: "852333646886",
+            appId: "1:852333646886:android:b7fb468b56eb00246202e7",
+            measurementId: "G-SD848QB5QP"),
+      );
+
+      runApp(Deslizable(
+        app: app,
+      ));
+    } else {
+      runApp(Deslizable(
+        app: Firebase.apps[0],
+      ));
+    }
   }
 }

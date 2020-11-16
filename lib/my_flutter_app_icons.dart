@@ -22,9 +22,20 @@ class MyFlutterApp {
   static const _kFontPkg = null;
 
   static const IconData ventilador = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData icono_persiana_a = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData smart_curtain = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bombilla1 = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bombilla2 = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData candado1 = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData candado2 = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData plant = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cuenco_de_comida_para_perros = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData garage_up = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData garaje_privado = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData sala = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData stairs_with_handrail = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData siren = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData chef_toque_and_mustache = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bath = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bed = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData garage_down = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
