@@ -37,8 +37,8 @@ class _DeslizableState extends State<Deslizable> {
   IconData puertaG2 = MyFlutterApp.garage_down;
   IconData puertaS = MyFlutterApp.candado2;
   IconData seguridad = MyFlutterApp.candado2;
-  Container ventilador;
-  dynamic _temperatura;
+  Container ventilador = animateIcon(Colors.grey, 'ven_on', 400, 400, true);
+  dynamic _temperatura = 0;
   //Lista con los estados de los botones de las bombillas
   List<bool> buttonPressedL = [false, false, false, false, false];
 
@@ -94,9 +94,11 @@ class _DeslizableState extends State<Deslizable> {
       setState(() {
         if (event.snapshot.value == 1) {
           _estadoAlarma = true;
+          color3 = Colors.red[900];
           seguridad = MyFlutterApp.candado1;
         } else {
           _estadoAlarma = false;
+          color3 = Colors.grey;
           seguridad = MyFlutterApp.candado2;
         }
       });
