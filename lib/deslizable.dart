@@ -114,8 +114,16 @@ class _DeslizableState extends State<Deslizable> {
             colorPG = Colors.pink;
             puertaG = MyFlutterApp.garage_up;
             puertaG2 = MyFlutterApp.garage_down;
-          } else {
+          } else if (event.snapshot.value == 0) {
             _estadoPuGaraje = false;
+            colorPG = Colors.grey;
+            puertaG = MyFlutterApp.garage_down;
+            puertaG2 = MyFlutterApp.garage_up;
+          } else if (event.snapshot.value == 2) {
+            colorPG = Colors.pink;
+            puertaG = MyFlutterApp.garage_up;
+            puertaG2 = MyFlutterApp.garage_down;
+          } else if (event.snapshot.value == 3) {
             colorPG = Colors.grey;
             puertaG = MyFlutterApp.garage_down;
             puertaG2 = MyFlutterApp.garage_up;
@@ -273,13 +281,12 @@ class _DeslizableState extends State<Deslizable> {
         length: 7,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: Colors.grey[900],
             bottomNavigationBar: BottomAppBar(
               color: Colors.transparent,
               elevation: 0,
               child: TabBar(
                 unselectedLabelColor: Colors.white,
-                labelColor: Colors.grey,
+                labelColor: Colors.grey[800],
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
                       color: Colors.white, width: 2.0, style: BorderStyle.none),
@@ -296,7 +303,7 @@ class _DeslizableState extends State<Deslizable> {
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(MyFlutterApp.chef_toque_and_mustache),
+                    icon: Icon(Icons.kitchen),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
@@ -315,7 +322,7 @@ class _DeslizableState extends State<Deslizable> {
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                   Tab(
-                    icon: Icon(MyFlutterApp.bath),
+                    icon: Icon(Icons.code),
                     iconMargin: EdgeInsets.symmetric(horizontal: 15),
                   ),
                 ],
@@ -331,17 +338,16 @@ class _DeslizableState extends State<Deslizable> {
                     Padding(
                       padding: const EdgeInsets.only(right: 48.0, left: 48.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          icon(colors[0], bombillas[2], 80),
-                          icon(color1, MyFlutterApp.smart_curtain, 100),
+                          icon(colors[0], bombillas[2], 100),
                         ],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 20.0, left: 20.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomButton(
                             onPressed: () {
@@ -363,25 +369,6 @@ class _DeslizableState extends State<Deslizable> {
                             iconSize: 60,
                             state: buttonPressedL[0],
                           ),
-                          CustomButton(
-                            icon: MyFlutterApp.smart_curtain,
-                            iconSize: 60,
-                            color: Colors.cyan,
-                            state: _estadoPersiana,
-                            onPressed: () {
-                              setState(() {
-                                if (_estadoPersiana == true) {
-                                  color1 = Colors.grey;
-                                  _persianaRef.set(0);
-                                  _estadoPersiana = false;
-                                } else {
-                                  color1 = Colors.cyan;
-                                  _persianaRef.set(1);
-                                  _estadoPersiana = true;
-                                }
-                              });
-                            },
-                          ),
                         ],
                       ),
                     ),
@@ -392,7 +379,7 @@ class _DeslizableState extends State<Deslizable> {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         icon(colors[3], bombillas[4], 100),
                         icon(colorPG, puertaG, 100)
@@ -423,27 +410,26 @@ class _DeslizableState extends State<Deslizable> {
                         state: buttonPressedL[3],
                       ),
                       CustomButton(
-                        onPressed: () {
-                          setState(() {
-                            if (_estadoPuGaraje) {
-                              colorPG = Colors.grey;
-                              puertaG = MyFlutterApp.garage_down;
-                              puertaG2 = MyFlutterApp.garage_up;
-                              _garajePuRef.set(0);
-                            } else {
-                              colorPG = Colors.pink;
-                              puertaG = MyFlutterApp.garage_up;
-                              puertaG2 = MyFlutterApp.garage_down;
-                              _garajePuRef.set(1);
-                            }
-                            _estadoPuGaraje = !_estadoPuGaraje;
-                          });
-                        },
-                        color: Colors.pink,
-                        icon: puertaG2,
-                        iconSize: 60,
-                        state: _estadoPuGaraje,
-                      )
+                          onPressed: () {
+                            setState(() {
+                              if (_estadoPuGaraje) {
+                                colorPG = Colors.grey;
+                                puertaG = MyFlutterApp.garage_down;
+                                puertaG2 = MyFlutterApp.garage_up;
+                                _garajePuRef.set(0);
+                              } else {
+                                colorPG = Colors.pink;
+                                puertaG = MyFlutterApp.garage_up;
+                                puertaG2 = MyFlutterApp.garage_down;
+                                _garajePuRef.set(1);
+                              }
+                              _estadoPuGaraje = !_estadoPuGaraje;
+                            });
+                          },
+                          color: Colors.pink,
+                          icon: puertaG2,
+                          iconSize: 60,
+                          state: _estadoPuGaraje)
                     ],
                   )
                 ]),
@@ -453,7 +439,7 @@ class _DeslizableState extends State<Deslizable> {
                     Padding(
                       padding: const EdgeInsets.only(right: 40.0, left: 40.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           icon(colors[2], bombillas[3], 100),
                           icon(colorD,
@@ -462,7 +448,7 @@ class _DeslizableState extends State<Deslizable> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomButton(
                           onPressed: () {
@@ -522,10 +508,6 @@ class _DeslizableState extends State<Deslizable> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [icon(colorPS, puertaS, 100)],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CustomButton(
                           onPressed: () {
@@ -568,31 +550,6 @@ class _DeslizableState extends State<Deslizable> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomButton(
-                          onPressed: () {
-                            setState(() {
-                              if (_estadoPuSala) {
-                                colorPS = Colors.grey;
-                                puertaS = MyFlutterApp.candado2;
-                                _salaPuRef.set(0);
-                              } else {
-                                colorPS = Colors.deepOrange;
-                                puertaS = MyFlutterApp.candado1;
-                                _salaPuRef.set(1);
-                              }
-                              _estadoPuSala = !_estadoPuSala;
-                            });
-                          },
-                          color: Colors.deepOrange,
-                          icon: MyFlutterApp.candado1,
-                          iconSize: 60,
-                          state: _estadoPuSala,
-                        )
-                      ],
-                    )
                   ],
                 ),
                 customTab(
@@ -669,10 +626,53 @@ class _DeslizableState extends State<Deslizable> {
                   ],
                 ),
                 customTab([
-                  title("Iconos"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [],
+                  Flexible(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Grupo de trabajo",
+                              style: TextStyle(
+                                  fontFamily: 'Handlee',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
+                            SizedBox(height: 10),
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              children: [
+                                persona('Mafe', 'images/alejandro.jpeg'),
+                                persona('Sofía', 'images/sofia.jpeg'),
+                                persona('Julian', 'images/julian.jpeg'),
+                                persona('Juan Luis', 'images/juan.jpeg'),
+                                persona('Alejandro', 'images/alejandro.jpeg'),
+                                persona('Estefanía', 'images/estefania.jpeg'),
+                                persona('Emanuel', 'images/alejandro.jpeg'),
+                                persona('Juan David', 'images/afro1.jpeg'),
+                              ],
+                            ),
+                            Text(
+                              "Iconos",
+                              style: TextStyle(
+                                  fontFamily: 'Handlee',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
+                            SizedBox(height: 10),
+                            Wrap(
+                              spacing: 5,
+                              children: [
+                                persona('Freepik', 'images/freepik.png'),
+                                persona('Flaticon', 'images/flaticon.png')
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ]),
               ],

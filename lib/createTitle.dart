@@ -9,8 +9,8 @@ Flexible title(String title, [double fsize = 25, Color color = Colors.white]) {
           color: Colors.grey[800],
           boxShadow: [
             BoxShadow(
-              color: Colors.grey[800],
-              blurRadius: 10,
+              color: Colors.grey[900],
+              blurRadius: 15,
               spreadRadius: 2,
             ),
           ]),
@@ -19,6 +19,8 @@ Flexible title(String title, [double fsize = 25, Color color = Colors.white]) {
         style: TextStyle(
           color: color,
           fontSize: fsize,
+          fontFamily: "Handlee",
+          fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center,
       ),

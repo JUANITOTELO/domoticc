@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'my_flutter_app_icons.dart';
 import 'createTitle.dart';
+import 'createCTab.dart';
 import 'createButton.dart';
 
 class DWeb extends StatefulWidget {
@@ -204,11 +205,56 @@ class _DWebState extends State<DWeb> {
                   color: Colors.grey,
                   size: 120,
                 ),
-                Icon(
-                  MyFlutterApp.candado1,
-                  color: Colors.grey,
-                  size: 120,
-                )
+                customTab([
+                  Flexible(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Grupo de trabajo",
+                              style: TextStyle(
+                                  fontFamily: 'Handlee',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
+                            SizedBox(height: 10),
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              children: [
+                                persona('Juan David', 'images/afro1.jpeg'),
+                                persona('Alejandro', 'images/alejandro.jpeg'),
+                                persona('Sofia', 'images/sofia.jpeg'),
+                                persona('Alejandro', 'images/alejandro.jpeg'),
+                                persona('Juan David', 'images/afro1.jpeg'),
+                                persona('Alejandro', 'images/alejandro.jpeg'),
+                                persona('Juan Luis', 'images/juan.jpeg'),
+                                persona('Alejandro', 'images/alejandro.jpeg')
+                              ],
+                            ),
+                            Text(
+                              "Iconos",
+                              style: TextStyle(
+                                  fontFamily: 'Handlee',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
+                            SizedBox(height: 10),
+                            Wrap(
+                              spacing: 5,
+                              children: [
+                                persona('Freepik', 'images/freepik.png'),
+                                persona('Flaticon', 'images/flaticon.png')
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
               ],
             ),
           ),
